@@ -32,10 +32,10 @@ const manifest = {
         name: "desk",
         srcs: "assets/desk.jpg"
       },
-      // {
-      //   name: "doodlebot",
-      //   srcs: "assets/Doodlebot/model.gltf"
-      // }
+      {
+        name: "doodlebot",
+        srcs: "assets/Doodlebot.gltf"
+      }
     ],
   }]
 };
@@ -43,10 +43,12 @@ const manifest = {
 await Assets.init({ manifest });
 let assets = await Assets.loadBundle("assets");
 
-let model = app.stage.addChild(Model.from(assets.teapot));
-model.y = -0.8;
+// let model = app.stage.addChild(Model.from(assets.teapot));
+// model.y = -0.8;
 
-// let doodlebot = app.stage.addChild(Model.from(assets.doodlebot));
+let doodlebot = app.stage.addChild(Model.from(assets.doodlebot));
+const doodlebotScale = 0.02;
+doodlebot.scale.set(doodlebotScale, doodlebotScale, doodlebotScale);
 
 // let ground = app.stage.addChild(Mesh3D.createPlane())
 // ground.y = -0.8
@@ -76,6 +78,7 @@ shadowCastingLight.shadowArea = 15;
 
 let pipeline = app.renderer.plugins.pipeline;
 // pipeline.enableShadows(ground, shadowCastingLight)
-pipeline.enableShadows(model, shadowCastingLight);
+// pipeline.enableShadows(model, shadowCastingLight);
+pipeline.enableShadows(doodlebot, shadowCastingLight);
 
 let control = new CameraOrbitControl(app.view as HTMLCanvasElement);
