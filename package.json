@@ -16,6 +16,7 @@
     "webpack-dev-server": "4.9.3"
   },
   "dependencies": {
+    "@pixi/webworker": "^7.4.0",
     "fbx2gltf": "^0.9.7-p1"
   }
 }
