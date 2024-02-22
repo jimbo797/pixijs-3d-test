@@ -43,16 +43,16 @@ const manifest = {
 await Assets.init({ manifest });
 let assets = await Assets.loadBundle("assets");
 
-// let model = app.stage.addChild(Model.from(assets.teapot));
-// model.y = -0.8;
+let model = app.stage.addChild(Model.from(assets.teapot));
+model.y = -0.8;
 
-let doodlebot = app.stage.addChild(Model.from(assets.doodlebot));
-const doodlebotScale = 0.02;
-doodlebot.scale.set(doodlebotScale, doodlebotScale, doodlebotScale);
+// let doodlebot = app.stage.addChild(Model.from(assets.doodlebot));
+// const doodlebotScale = 0.02;
+// doodlebot.scale.set(doodlebotScale, doodlebotScale, doodlebotScale);
 
-// let ground = app.stage.addChild(Mesh3D.createPlane())
-// ground.y = -0.8
-// ground.scale.set(10, 1, 10)
+let ground = app.stage.addChild(Mesh3D.createPlane())
+ground.y = -0.8
+ground.scale.set(10, 1, 10)
 
 let backdrop = app.stage.addChild(Sprite.from(assets.desk));
 backdrop.y = -250;
@@ -68,7 +68,7 @@ LightingEnvironment.main.imageBasedLighting = new ImageBasedLighting(
 let directionalLight = new Light();
 directionalLight.intensity = 1;
 directionalLight.type = LightType.directional;
-directionalLight.rotationQuaternion.setEulerAngles(25, 120, 0);
+directionalLight.rotationQuaternion.setEulerAngles(30, 270, 90);
 LightingEnvironment.main.lights.push(directionalLight);
 
 let shadowCastingLight = new ShadowCastingLight(
@@ -77,8 +77,8 @@ shadowCastingLight.softness = 1;
 shadowCastingLight.shadowArea = 15;
 
 let pipeline = app.renderer.plugins.pipeline;
-// pipeline.enableShadows(ground, shadowCastingLight)
-// pipeline.enableShadows(model, shadowCastingLight);
-pipeline.enableShadows(doodlebot, shadowCastingLight);
+pipeline.enableShadows(ground, shadowCastingLight)
+pipeline.enableShadows(model, shadowCastingLight);
+// pipeline.enableShadows(doodlebot, shadowCastingLight);
 
 let control = new CameraOrbitControl(app.view as HTMLCanvasElement);
