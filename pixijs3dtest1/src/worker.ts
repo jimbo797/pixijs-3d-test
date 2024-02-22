@@ -1,15 +1,19 @@
 /// <reference path='../global.d.ts' />
 
-import { Application, Assets, Renderer, Sprite, Ticker } from "pixi.js";
+import { Application, Assets, Renderer, Sprite, Ticker } from '@pixi/webworker';
 import { CameraOrbitControl, LightingEnvironment, ImageBasedLighting, Model, Mesh3D, Light, LightType, ShadowCastingLight, ShadowQuality } from "pixi3d/pixi7";
 
 
 // Everything should run in a worker, and worker should receive the canvas information (and everything related to it)
 // Main thread hands off the canvas to the worker, and the worker receives canves info and then does everything
 
+console.log('Test')
+
 self.onmessage = async e => {
   // Recieve OffscreenCanvas from index.js
   const { width, height, resolution, view } = e.data;
+
+  console.log('Test')
 
   // The application will create a renderer using WebGL, if possible,
   // with a fallback to a canvas render. It will also setup the ticker
@@ -20,7 +24,7 @@ self.onmessage = async e => {
   //   backgroundColor: 0xdddddd, resizeTo: window, antialias: true
   // });
 
-  document.body.appendChild(app.view as HTMLCanvasElement);
+  // document.body.appendChild(app.view as HTMLCanvasElement);
   app.stage.sortableChildren = true;
 
   const manifest = {
@@ -57,7 +61,7 @@ self.onmessage = async e => {
   // let model = app.stage.addChild(Model.from(assets.teapot));
   // model.y = -0.8;
 
-  let doodlebot = app.stage.addChild(Model.from(assets.doodlebot));
+  let doodlebot = app.stage.addChild(Model.from(assets.doodlebot) as any);
   const doodlebotScale = 0.02;
   doodlebot.scale.set(doodlebotScale, doodlebotScale, doodlebotScale);
 
@@ -83,7 +87,7 @@ self.onmessage = async e => {
   LightingEnvironment.main.lights.push(directionalLight);
 
   let shadowCastingLight = new ShadowCastingLight(
-    app.renderer as Renderer, directionalLight, { shadowTextureSize: 1024, quality: ShadowQuality.medium });
+    app.renderer as any, directionalLight, { shadowTextureSize: 1024, quality: ShadowQuality.medium });
   shadowCastingLight.softness = 1;
   shadowCastingLight.shadowArea = 15;
 
