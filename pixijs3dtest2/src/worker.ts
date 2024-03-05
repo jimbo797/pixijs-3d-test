@@ -7,13 +7,9 @@ import { CameraOrbitControl, LightingEnvironment, ImageBasedLighting, Model, Mes
 // Everything should run in a worker, and worker should receive the canvas information (and everything related to it)
 // Main thread hands off the canvas to the worker, and the worker receives canves info and then does everything
 
-console.log('Test2.5');
-
 self.onmessage = async e => {
   // Recieve OffscreenCanvas from index.js
   const { width, height, resolution, view } = e.data;
-
-  console.log('Test');
 
   // The application will create a renderer using WebGL, if possible,
   // with a fallback to a canvas render. It will also setup the ticker
@@ -33,23 +29,23 @@ self.onmessage = async e => {
       assets: [
         {
           name: "diffuse",
-          srcs: "assets/chromatic/diffuse.cubemap",
+          srcs: "/assets/chromatic/diffuse.cubemap",
         },
         {
           name: "specular",
-          srcs: "assets/chromatic/specular.cubemap",
+          srcs: "/assets/chromatic/specular.cubemap",
         },
         {
           name: "teapot",
-          srcs: "assets/teapot/teapot.gltf",
+          srcs: "/assets/teapot/teapot.gltf",
         },
         {
           name: "desk",
-          srcs: "assets/desk.jpg"
+          srcs: "/assets/desk.jpg"
         },
         {
           name: "doodlebot",
-          srcs: "assets/Doodlebot.gltf"
+          srcs: "/assets/Doodlebot.gltf"
         }
       ],
     }]
@@ -64,10 +60,13 @@ self.onmessage = async e => {
   let doodlebot = app.stage.addChild(Model.from(assets.doodlebot) as any);
   const doodlebotScale = 0.02;
   doodlebot.scale.set(doodlebotScale, doodlebotScale, doodlebotScale);
+  doodlebot.rotationQuaternion.setEulerAngles(0, 90, 0);
 
-  // let ground = app.stage.addChild(Mesh3D.createPlane())
-  // ground.y = -0.8
-  // ground.scale.set(10, 1, 10)
+  // want plane to be transparent but shadow to be visible
+  let ground = app.stage.addChild(Mesh3D.createPlane());
+  ground.y = -0.8;
+  ground.scale.set(10, 1, 10);
+  // ground.visible = false; 
 
   let backdrop = app.stage.addChild(Sprite.from(assets.desk));
   backdrop.y = -250;
@@ -83,7 +82,7 @@ self.onmessage = async e => {
   let directionalLight = new Light();
   directionalLight.intensity = 1;
   directionalLight.type = LightType.directional;
-  directionalLight.rotationQuaternion.setEulerAngles(25, 120, 0);
+  directionalLight.rotationQuaternion.setEulerAngles(90, 0, 0); // x=90 means directly above
   LightingEnvironment.main.lights.push(directionalLight);
 
   let shadowCastingLight = new ShadowCastingLight(
@@ -92,7 +91,7 @@ self.onmessage = async e => {
   shadowCastingLight.shadowArea = 15;
 
   let pipeline = app.renderer.plugins.pipeline;
-  // pipeline.enableShadows(ground, shadowCastingLight)
+  pipeline.enableShadows(ground, shadowCastingLight);
   // pipeline.enableShadows(model, shadowCastingLight);
   pipeline.enableShadows(doodlebot, shadowCastingLight);
 
