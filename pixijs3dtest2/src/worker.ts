@@ -1,6 +1,7 @@
 /// <reference path='../global.d.ts' />
 
-import { Application, Assets, Renderer, Sprite, Ticker } from '@pixi/webworker';
+import { Application, Assets, Renderer, Sprite, Ticker, Filter } from '@pixi/webworker';
+import * as PIXI from '@pixi/webworker';
 import { CameraOrbitControl, LightingEnvironment, ImageBasedLighting, Model, Mesh3D, Light, LightType, ShadowCastingLight, ShadowQuality } from "pixi3d/pixi7";
 
 
@@ -66,7 +67,26 @@ self.onmessage = async e => {
   let ground = app.stage.addChild(Mesh3D.createPlane());
   ground.y = -0.8;
   ground.scale.set(10, 1, 10);
-  // ground.visible = false; 
+  // ground.alpha = 0.05; // setting opacity to 0 also sets shadow
+  // const transparentGround = new Filter(); // filter out everything but the shadow?
+  // ground.material = 
+
+  // Making the ground invisible, but why? Maybe because mesh3d object doesn't have colors?
+  // const transparentGround = new PIXI.ColorMatrixFilter(); 
+  // ground.filters = [transparentGround];
+  // console.log(transparentGround.matrix);
+  // transparentGround.contrast(1, true);
+  // transparentGround.matrix =
+  //   [
+  //     1, 0, 0, 0,
+  //     0, 1, 0, 0,
+  //     0, 0, 1, 0,
+  //     0, 0, 0, 1,
+  //     0, 0, 0, 0,
+  //   ]; // why 5x4 ?
+
+  // console.log(transparentGround.matrix);
+
 
   let backdrop = app.stage.addChild(Sprite.from(assets.desk));
   backdrop.y = -250;
